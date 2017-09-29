@@ -1,0 +1,9 @@
+{
+  "name": "node-spider",
+  "version": "0.0.1",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "q": "^1.5.0",
+    "request": "^2.83.0"
+  }
+}
