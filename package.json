@@ -2,7 +2,9 @@
   "name": "node-spider",
   "version": "0.0.1",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
     "fs": "0.0.1-security",
+    "iconv-lite": "^0.4.19",
     "q": "^1.5.0",
     "request": "^2.83.0"
   }

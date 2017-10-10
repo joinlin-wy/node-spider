@@ -1,0 +1,154 @@
+body, a, img{
+    margin: 0;
+    padding: 0;
+    border: none;
+    color: #9f9f9d;
+}
+button{
+    outline: none;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+}
+.news_body{
+    position: absolute;
+    width: 1280px;
+    height: 720px;
+    background: url("img/news_bg.jpg") no-repeat;
+}
+.news_title{
+    display: block;
+    margin: 62px 0 0 72px;
+    font-size: 28px;
+    height: 30px;
+    line-height: 30px;
+    padding-left: 40px;
+    color: #FFFFFF;
+    background: url("img/news_title_ico.png") no-repeat;
+}
+/*菜单*/
+.news_menu{
+    margin: 26px 0 0 0;
+    padding-left: 80px;
+    padding-bottom: 20px;
+    overflow: hidden;
+    height: 52px;
+    border-bottom: 2px solid rgba(255,255,255,0.2);
+}
+.news_menu button{
+    display: block;
+    float: left;
+    width: 130px;
+    height: 52px;
+    line-height: 52px;
+    font-size: 24px;
+    margin-right: 12px;
+    text-align: center;
+    color: #9f9f9d;
+    border-radius: 8px;
+}
+.news_menu button:focus{
+    color: #FFFFFF;
+    background: #37a7ff;
+    /*background: url("img/news_menu_focus.png") no-repeat;*/
+
+}
+.news_menu button.menuPos:focus{
+    color: #FFFFFF;
+    background: #37a7ff;
+
+}
+.news_menu button.menuPos{
+    color: #FFFFFF;
+    background: rgba(211, 211, 211, 0.2);
+}
+/*地方新闻省市列表*/
+.news_province{
+    overflow: hidden;
+    height: 400px;
+    margin: 48px 0 0 79px;
+}
+.news_province a{
+    display: block;
+    float: left;
+    width: 123px;
+    height: 72px;
+    margin: 0 2px 28px 0;
+    color: #FFFFFF;
+    text-align: center;
+    line-height: 72px;
+    font-size: 24px;
+    overflow: hidden;
+    background: url("img/news_prov_bg.png") no-repeat center;
+}
+.news_province a:focus{
+    background: url("img/news_prov_focus.png") no-repeat center;
+}
+.news_province a.big{
+    width: 222px;
+    height: 71px;
+    background: url("img/news_prov_big_bg.png");
+}
+.news_province a.big:focus{
+    background: url("img/news_prov_big_focus.png");
+}
+
+/*视频新闻列表 lee*/
+.news_newsList{
+    position: relative;
+    margin: 18px 0 0 66px;
+    padding-left: 13px;
+    width: 1156px;
+    overflow: hidden;
+}
+.news_newsList_noMenu{
+    margin-top: 72px;
+}
+.news_newsList_showBG{
+    background-image: url("img/news_list_focus.png");
+    background-repeat: no-repeat;
+}
+.news_newsList a{
+    display: block;
+    float: left;
+    margin: 0 11px 20px 1px;
+    width: 215px;
+    height: 206px;
+    overflow: hidden;
+}
+.news_newsList_noMenu a{
+    margin-bottom: 52px;
+}
+/*.news_newsList a:focus{
+    background: url("img/news_list_focus.png") no-repeat;
+}*/
+.news_newsList a > img{
+    margin: 13px 0 0 0;
+}
+.news_newsList a > span{
+    display: block;
+    width: 217px;
+    height: 44px;
+    line-height: 22px;
+    overflow: hidden;
+    margin: 16px 0 0 0;
+    font-size: 20px;
+}
+.news_newsList a:focus > span{
+    color: #FFFFFF;
+}
+.news_newsList_arrow{
+    position: absolute;
+    right: 0;
+    height: 420px;
+    width: 17px;
+    background: url("img/news_list_arrow_right.png") no-repeat center;
+}
+#news_noList{
+    width: 100%;
+    text-align: center;
+    color: #ffffff;
+    font-size: 30px;
+    margin-top: 200px;
+}
