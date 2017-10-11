@@ -5,11 +5,14 @@
 
 a
 {
+    display: inline-block;
     outline:none;
     text-decoration:none;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    color: #37a7ff;
 }
-
+a:hover{
+    color: #00aa55;
+}
 .show
 {
     display:block;
@@ -29,7 +32,9 @@ a
 {
     visibility:hidden;
 }
-.news_newsList{
-    font-size: 25px;
-    padding:10px;
+video{
+    object-fit: scale-down;
+}
+.padding-left-1{
+    padding-left: 10px;
 }

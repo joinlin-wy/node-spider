@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="common.css">
+</head>
+<body bgcolor="#ddd">
+<div class="padding-left-1">
+    <a href="javascript:load();" id="download">
+        <h3>加载</h3>
+    </a>
+    进度：<span id="progress"></span>
+    <form action="" datatype="form/data">
+        <input type="email">
+        <input type="url">
+        <input type="number">
+        <input type="range">
+        <input type="date">
+        <input type="search">
+        <input type="color">
+        <input type="file">
+    </form>
+</div>
+<button onclick="preview()">预览</button>
+<video src="" controls id="preview" width="80%"></video>
+<script>
+  var $ = function (selector) {
+    return document.querySelector(selector);
+  }
+
+  function Ajax(config, fun, updateProgress) {
+    //创建xhr对象
+    var xhr = new XMLHttpRequest();
+    //设置xhr请求的超时时间
+    xhr.timeout = config.timeout || 0;
+    //设置响应返回的数据格式
+    xhr.responseType = config.responseType || "";
+    //创建一个 post 请求，采用异步
+    xhr.open(config.reqType || "GET", config.url, config.async || true);
+    //注册相关事件回调处理函数
+    xhr.onload = function (e) {
+      if (this.status >= 200 && this.status < 300 || this.status == 304) {
+        fun(this.response);
+      } else {
+        console.log('error:' + xhr.status);
+      }
+    };
+    xhr.ontimeout = function (e) {
+      console.log("request timeout!")
+    };
+    xhr.onerror = function (e) {
+      console.log("request err:" + e);
+    };
+    xhr.onprogress = updateProgress;
+    xhr.upload.onprogress = updateProgress;
+    //发送数据
+    xhr.send();
+  }
+
+  var imgBlob = null;
+  var url = "../data/AOA - Excuse MeAOA - Excus.mp4";
+
+  function load() {
+    Ajax({url: url, reqType: "GET", responseType: "blob"}, function (data) {
+      imgBlob = URL.createObjectURL(data);
+      var link = document.getElementById("download");
+      link.href = imgBlob;
+      link.download = "文件下载";
+      console.log("加载完成");
+    }, updateProgress);
+  }
+
+
+  function updateProgress(event) {
+    if (event.lengthComputable) {
+      var completedPercent = (event.loaded / event.total * 100).toFixed(2) + "%";
+      $("#progress").innerText = completedPercent;
+    }
+  }
+
+  function preview() {
+    if (imgBlob) {
+      var audio = document.getElementById("preview");
+      audio.src = imgBlob;
+      audio.play();
+    }
+
+  }
+
+
+</script>
+</body>
+</html>
