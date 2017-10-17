@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
   }
 });
 
-let upload = multer({ storage: storage ,limits:{fileSize:100000000}}).single('file');//"file"是文件的name属性值
+var upload = multer({ storage: storage ,limits:{fileSize:100000000}}).single('file');//"file"是文件的name属性值
 app.post('/upload',function (req,res) {
   upload(req, res, function (err) {
     if (err) {
@@ -27,6 +27,6 @@ app.post('/upload',function (req,res) {
   })
 })
 
-app.listen(3000,function () {
+app.listen(80,function () {
   console.log('实例运行')
 });

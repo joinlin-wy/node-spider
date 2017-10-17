@@ -10,7 +10,7 @@ function readyToUpload(ele) {
 function upload() {
   var file = $("#fileUpload").files[0];
   if(!file){
-    alert("未选择文件！")
+    alert("未选择文件！");
     return;
   }
   if(file.size>100000000){
@@ -105,7 +105,7 @@ function Ajax(config, fun, updateProgress) {
   //设置响应返回的数据格式
   xhr.responseType = config.responseType || "";
   //创建一个 post 请求，采用异步
-  xhr.open(config.type || "GET", config.url, config.async || true);
+  xhr.open(config.type || "GET", config.url||config, config.async || true);
   //注册相关事件回调处理函数
   xhr.onload = function (e) {
     if (this.status >= 200 && this.status < 300 || this.status == 304) {
