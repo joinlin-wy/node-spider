@@ -2,24 +2,30 @@
  * joinlin 创建于 2017/10/12.
  */
 var $ = function (selector) {
-  return document.querySelector(selector);
+  var jquery = document.querySelector(selector);
+  jquery.html = function (html) {
+    jquery.innerHTML = html;
+  };
+  return jquery;
 };
 function readyToUpload(ele) {
   console.log(ele);
 }
 function upload() {
   var file = $("#fileUpload").files[0];
+  var fileAdd = $("#file").files[0];
   if(!file){
     alert("未选择文件！");
     return;
   }
   if(file.size>100000000){
-    alert("文件过大！请选择小于100M的文件")
+    alert("文件过大！请选择小于100M的文件");
     return;
   }
   var form = new FormData();
   form.append("name","bg");
   form.append("file",file);
+  form.append("file",fileAdd);
   Ajax({
     url:"upload",
     type:"POST",
@@ -37,7 +43,7 @@ var imgBlob = null;
 var url = "../data/AOA - Excuse MeAOA - Excus.mp4";
 
 function load() {
-  Ajax({url: url, reqType: "GET", responseType: "blob"}, function (data) {
+  Ajax({url: url, type: "GET", responseType: "blob"}, function (data) {
     imgBlob = URL.createObjectURL(data);
     var link = document.getElementById("download");
     link.href = imgBlob;
@@ -52,8 +58,7 @@ function updateProgress(event) {
     draw(completedPercent,$("#proC"))
   }
 }
-draw(0,$("#process"));
-draw(0,$("#proC"));
+
 function draw(counter,canvas) {//接受1到100数字
   var radius = canvas.width/2-1,
       point = canvas.width/2,
@@ -86,7 +91,7 @@ function draw(counter,canvas) {//接受1到100数字
   
   ctx.fillStyle="#000000";
   ctx.font=radius*0.5+"px Arial";
-  ctx.fillText(counter.toFixed(0)+"%",radius,radius);
+  ctx.fillText(parseInt(counter)+"%",radius,radius);
 }
 function preview() {
   if (imgBlob) {

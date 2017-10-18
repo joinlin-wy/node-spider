@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/upload.js"></script>
+    <style>
+        div{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div><input type="button" value=refresh onclick="refresh()"></div>
+<script>
+    function refresh() {
+      Ajax("/refresh",function (data) {
+        alert(data);
+      })
+    }
+
+</script>
+</body>
+</html>

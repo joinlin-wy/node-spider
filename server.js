@@ -3,10 +3,14 @@
  */
 const express = require("express");
 const fs = require("fs");
+const webSocket = require("./webSocket");
+webSocket.serverStart();
+const cheerio = require("cheerio");
 //multer API https://www.npmjs.com/package/multer
 const multer = require("multer");
 const app = express();
 app.use(express.static('dist'));
+app.use("/data",express.static('data'));
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'data/uploads')
@@ -25,8 +29,17 @@ app.post('/upload',function (req,res) {
     }
     res.send("ok")
   })
-})
+}).get("/refresh",function (req,res) {
+  fs.readFile("dist/AJAXUpload.html","utf-8",function (err,data) {
+    var $ = cheerio.load(data);
+    var html = $("body").html();
+    webSocket.instance.forEach(function (ws) {
+      ws.send(html);
+    });
+    res.send("发送成功！")
+  });
+});
 
-app.listen(80,function () {
+app.listen(3000,function () {
   console.log('实例运行')
 });

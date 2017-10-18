@@ -10,14 +10,20 @@
     <a href="javascript:load();" id="download">
         <h3>加载</h3>
     </a>
-    进度：<input type="range" value="0" onmousemove="draw(this.value,$('#process'))" onchange="draw(this.value,$('#process'))">
+    进度：<input type="range" value="0" oninput="draw(this.value,$('#process'))"
+              max="100" onchange="draw(this.value,$('#process'))">
     <canvas id="process" width="50" height="50"></canvas>
     <br>
+    <input type="file" name="file" onchange="readyToUpload(this)" id="file">
     <input type="file" name="file" onchange="readyToUpload(this)" id="fileUpload">
     <input type="button" value="上传" onclick="upload()" >
     <canvas id="proC" width="80" height="80"></canvas><span style="color:lawngreen" id="proS"></span>
 
 </div>
 <script src="js/upload.js"></script>
+<script>
+  draw(0,$("#process"));
+  draw(0,$("#proC"));
+</script>
 </body>
 </html>
