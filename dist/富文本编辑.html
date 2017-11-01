@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h4>iframe编辑框</h4>
+<iframe name="richedit" style="height:200px;width:400px;border:1px solid #9f9f9d;" src="blank.html"></iframe>
+<h4>div编辑框</h4>
+<div class="editable" id="richedit" style="border:1px solid #9f9f9d"
+     contenteditable></div>
+
+<script type="text/javascript">
+  window.addEventListener("load", function(){
+    frames["richedit"].document.designMode = "on";
+    frames["richedit"].document.execCommand("bold", false, null);
+  });
+
+</script>
+</body>
+</html>

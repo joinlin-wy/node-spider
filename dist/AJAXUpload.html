@@ -14,7 +14,7 @@
               max="100" onchange="draw(this.value,$('#process'))">
     <canvas id="process" width="50" height="50"></canvas>
     <br>
-    <input type="file" name="file" onchange="readyToUpload(this)" id="file">
+    <input type="file" name="file" onchange="readyToUpload(this)" id="file"><span id="size1"></span>
     <input type="file" name="file" onchange="readyToUpload(this)" id="fileUpload">
     <input type="button" value="上传" onclick="upload()" >
     <canvas id="proC" width="80" height="80"></canvas><span style="color:lawngreen" id="proS"></span>
@@ -24,6 +24,7 @@
 <script>
   draw(0,$("#process"));
   draw(0,$("#proC"));
+
 </script>
 </body>
 </html>

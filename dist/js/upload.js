@@ -9,7 +9,8 @@ var $ = function (selector) {
   return jquery;
 };
 function readyToUpload(ele) {
-  console.log(ele);
+  var file = ele.files[0];
+  $("#size1").html("大小:"+(file.size/1000).toFixed(2)+"KB")
 }
 function upload() {
   var file = $("#fileUpload").files[0];

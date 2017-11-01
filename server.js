@@ -38,8 +38,13 @@ app.post('/upload',function (req,res) {
     });
     res.send("发送成功！")
   });
+}).get(/[ToUrl]/i,function (req,res) {
+  fs.readFile("D:/nginx/html/proxy.html","utf-8",function (err,data) {
+    res.send(data)
+  });
+  
 });
 
 app.listen(3000,function () {
-  console.log('实例运行')
+  console.log('server实例运行localhost:3000')
 });

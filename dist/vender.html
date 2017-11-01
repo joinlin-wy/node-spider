@@ -23,7 +23,7 @@
             }
             function reconnect() {
               title.html("正在连接服务器···");
-              ws = new WebSocket("ws://127.0.0.1:8888"); // wss:// (if using TLS)
+              ws = new WebSocket("ws://111.111.1.101:8888"); // wss:// (if using TLS)
               ws.onopen = function(e) {
                 title.html("-已连接到服务器-");
 
