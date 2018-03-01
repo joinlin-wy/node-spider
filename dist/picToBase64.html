@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>picToBase64</title>
+</head>
+<body>
+<input type="file" id="fileUpload">
+<button onclick="convert()">转换</button><span id="progress"></span>
+<input type="button" value="上传识别" onclick="uploadAndRecognize()" >
+<canvas id="proC" width="80" height="80"></canvas>
+<br>
+<span style="color:#0a11fc" id="proS"></span>
+<script src="js/upload.js"></script>
+<script>
+    let fileInput = document.getElementById('fileUpload')
+    let convert = ()=>{
+        convertToBase64(fileInput.files[0],base64 =>{
+            console.log(base64)
+            let img = document.createElement('img')
+            img.src=base64
+            document.body.appendChild(img)
+        })
+    }
+    let uploadAndRecognize = ()=>{
+        upload(function (data) {
+            try{
+                data = JSON.parse(data)
+            }catch (e){}
+            let list = data.words_result.map(value => value.words)
+            $('#proS').innerHTML = list.join('<br>')
+        })
+    }
+    let convertToBase64 = (file,func) => {
+        console.log(file)
+        let reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onprogress = function(e){
+            //定时触发的事件，文件较大时明显
+            document.getElementById("progress").innerText =
+              '已完成：' + Math.round(e.loaded / e.total * 100) + '%' ;
+            console.log('uploading');  //文件较大，就会出现多个uploading
+        };
+        reader.onabort = function(){
+            console.log('abort'); //用作取消上传功能
+        };
+        reader.onerror = function(){
+            console.log('error'); //文件读取出错的时候触发，暂模拟不出
+        };
+        reader.onload = function(){
+            console.log('load complete'); //完成
+            let base64 = reader.result
+            if(func) func(base64)
+        };
+    }
+</script>
+</body>
+</html>

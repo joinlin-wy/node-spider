@@ -7,12 +7,15 @@ const fs = require("fs");
 const multer = require("multer");
 const app = express();
 app.use(express.static('dist'));
+app.use('/data', express.static('data'));
+let nowFileName = ''
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'data/uploads')
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now()+ '-' +file.originalname  )
+      nowFileName= file.originalname
+    cb(null, file.originalname)
   }
 });
 
@@ -23,10 +26,19 @@ app.post('/upload',function (req,res) {
       res.send(err.code);
       return
     }
-    res.send("ok")
+      require('./baidu-convertPicToText'). getAccessToken(function (result) {
+          require('./baidu-convertPicToText').recognize('data/uploads/'+nowFileName,function (body) {
+              res.send(body)
+          })
+      })
   })
+}).get(/convert/,function (req, res) {
+  require('./baidu-convertPicToText'). getAccessToken(function (result) {
+      res.send(result.access_token)
+  })
+  
 })
 
-app.listen(80,function () {
+app.listen(8080,function () {
   console.log('实例运行')
 });

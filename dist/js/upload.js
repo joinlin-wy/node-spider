@@ -7,7 +7,7 @@ var $ = function (selector) {
 function readyToUpload(ele) {
   console.log(ele);
 }
-function upload() {
+function upload(func) {
   var file = $("#fileUpload").files[0];
   if(!file){
     alert("未选择文件！");
@@ -26,10 +26,10 @@ function upload() {
     data:form
   },function (data) {
     if(data === "LIMIT_FILE_SIZE"){
-      $("#proS").innerText="文件过大！";
+      func("文件过大！");
       return
     }
-    $("#proS").innerText =data;
+    func(data);
   },updateProgress)
 }
 
@@ -52,7 +52,7 @@ function updateProgress(event) {
     draw(completedPercent,$("#proC"))
   }
 }
-draw(0,$("#process"));
+
 draw(0,$("#proC"));
 function draw(counter,canvas) {//接受1到100数字
   var radius = canvas.width/2-1,
@@ -86,7 +86,7 @@ function draw(counter,canvas) {//接受1到100数字
   
   ctx.fillStyle="#000000";
   ctx.font=radius*0.5+"px Arial";
-  ctx.fillText(counter.toFixed(0)+"%",radius,radius);
+  ctx.fillText(parseInt(counter)+"%",radius,radius);
 }
 function preview() {
   if (imgBlob) {
