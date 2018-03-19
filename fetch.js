@@ -1,21 +1,20 @@
 const request = require('request')
 const iconv = require('iconv-lite')
 
-function fetch(conf) {
-    var config = {}
-    if(typeof conf == 'object'){
-        config = conf
-    }else{
-        config.url = conf
-    }
+function fetch(config) {
+    var conf = {encoding: null}
+    conf.encoding = config.encoding
+    config.encoding = null
     return new Promise((resolve, reject) => {
-        request({url: config.url, encoding: null}, function (error, res, body) {
-            if (error || res.statusCode != 200) {
+        request(config, function (error, res, body) {
+            console.log('fetched url:'+config.url + ' statusCode:'+res.statusCode)
+            if (error) {
                 console.error(`${config.url} request error,statusCode:${res.statusCode},error massage:`)
                 console.log(error)
-                reject(error)
+                console.log('end')
+                reject()
             } else {
-                resolve(iconv.decode(body, config.encoding || 'utf-8'))
+                resolve(iconv.decode(body, conf.encoding || 'utf-8'))
             }
         })
     })

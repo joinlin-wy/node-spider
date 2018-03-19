@@ -1,19 +1,94 @@
 const fetch = require('./fetch')
 const cheerio = require('cheerio')
 const fs = require('fs')
-fetch({
-    url: 'https://www.hujiang.com/ciku/zuixinkaoyanyingyucihui/'
-}).then((data) => {
-    var $ = cheerio.load(data)
-    var list = $('.sp-lexicon-rank-module ul.sp-rank-content li').map(function () {
+const mongodb = require('./mongodb/')
+async function fetchData(Word) {
+    let data = ''
+    try {
+        data = await fetch({
+            url: 'http://dict.youdao.com/w/eng/' + Word + '/',
+            encoding: ''
+        })
+    } catch (error) {
+        console.log(error)
+        Promise.reject(error)
+    }
+    console.log(data)
+    let $ = cheerio.load(data)
+    let spelling = {
+        '英': $('.baav .phonetic').eq(0).text(),
+        '美': $('.baav .phonetic').eq(1).text()
+    }
+    let explanation = $('.trans-container li').eq(0).text()
+    let sentences = $('#examplesToggle #bilingual>ul.ol li').map(function () {
+        let en = $(this).find('p').eq(0).text().replace(/\n|\t|(\s*$)/g, '')
+        let zh = $(this).find('p').eq(1).text().replace(/\n|\t|(\s*$)/g, '')
         return {
-            word: $(this).find('a').text(),
-            explanation: $(this).find('span').text()
+            en,
+            zh
         }
     }).get()
-    fs.writeFile('data/wordlist.json', JSON.stringify(list), (error) => {
-        if(error) console.log(error)
-    })
-}, (error) => {
-    console.log(error)
-})
+    let word = {
+        word: Word,
+        spelling,
+        explanation,
+        sentences
+    }
+    console.log(word)
+    return word
+}
+
+function getWord(text) {
+    var str = ''
+    for (var i = 0; i < text.length; i++) {
+        if (text.charCodeAt(i) <= 255) {
+            str += text[i]
+        }
+    }
+    return str
+}
+
+async function updateWord(Word) {
+        let word = await fetchData(Word.word)
+        await mongodb.operate.updateWord({
+            filter: {
+                word: word.word
+            },
+            data: {
+                explanation: word.explanation,
+                spelling: word.spelling,
+                sentences: word.sentences
+            }
+        })
+        let updatedWord = await mongodb.operate.queryWord({
+            word: word
+        })
+}
+(async function () {
+    let client = null
+    try {
+        await mongodb.connect().then(() => {
+            console.log('connected to mongodb server')
+        })
+        client = mongodb.client
+        let words = await mongodb.operate.getWords({
+            query: {sentences:[]},
+            options: {
+                limit: null,
+                skip: null
+            }
+
+        })
+        // let promises = []
+        for (let i = 0; i < words.length; i++) {
+            let Word = words[i]
+            await updateWord(Word)
+            // promises.push(updateWord(Word));
+        }
+        // await Promise.all(promises)
+        client.close()
+    } catch (e) {
+        console.error(e)
+        client && client.close()
+    }
+})()
