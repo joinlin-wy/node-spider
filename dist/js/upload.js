@@ -2,24 +2,31 @@
  * joinlin 创建于 2017/10/12.
  */
 var $ = function (selector) {
-  return document.querySelector(selector);
+  var jquery = document.querySelector(selector);
+  jquery.html = function (html) {
+    jquery.innerHTML = html;
+  };
+  return jquery;
 };
 function readyToUpload(ele) {
-  console.log(ele);
+  var file = ele.files[0];
+  $("#size1").html("大小:"+(file.size/1000).toFixed(2)+"KB")
 }
 function upload(func) {
   var file = $("#fileUpload").files[0];
+  var fileAdd = $("#file").files[0];
   if(!file){
     alert("未选择文件！");
     return;
   }
   if(file.size>100000000){
-    alert("文件过大！请选择小于100M的文件")
+    alert("文件过大！请选择小于100M的文件");
     return;
   }
   var form = new FormData();
   form.append("name","bg");
   form.append("file",file);
+  form.append("file",fileAdd);
   Ajax({
     url:"upload",
     type:"POST",
@@ -37,7 +44,7 @@ var imgBlob = null;
 var url = "../data/AOA - Excuse MeAOA - Excus.mp4";
 
 function load() {
-  Ajax({url: url, reqType: "GET", responseType: "blob"}, function (data) {
+  Ajax({url: url, type: "GET", responseType: "blob"}, function (data) {
     imgBlob = URL.createObjectURL(data);
     var link = document.getElementById("download");
     link.href = imgBlob;

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh_CN">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title></title>
+        <meta name="description" content="在线聊天室">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="js/upload.js"></script>
+    </head>
+    <body>
+    <h3 id="title"></h3>
+    <div id="content"></div>
+
+        <script>
+            var userId=Math.random().toFixed(2);
+            var title =  $("#title");
+            var ws = null;
+            if( window.WebSocket ){
+              reconnect();
+            }else{
+                title.html("当前浏览器版本过低，请升级版本后再使用。")
+            }
+            function reconnect() {
+              title.html("正在连接服务器···");
+              ws = new WebSocket("ws://111.111.1.101:8888"); // wss:// (if using TLS)
+              ws.onopen = function(e) {
+                title.html("-已连接到服务器-");
+
+                ws.send("请求内容");
+              };
+              ws.onerror = function (error) {
+                console.log('WebSocket Error ' + error);
+                title.html("连接失败");
+              };
+              ws.onmessage = function (e) {
+
+                $("#content").html(e.data)
+              };
+              ws.onclose = function () {
+                title.html("连接关闭");
+                setTimeout(function (args) {
+                  reconnect();
+                },5000)
+              }
+            }
+            function sendMessage() {
+                var date=new Date();
+                var sendTime = date.getFullYear()+"/"+date.getMonth()+"/"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+                var message={
+                  id:userId,
+                  time:sendTime,
+                  content:$('#message').val(),
+                    toID:$('#toID').val()
+              };
+                ws.send(JSON.stringify(message));
+            }
+        </script>
+    </body>
+</html>
