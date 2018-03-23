@@ -6,33 +6,35 @@ async function fetchData(Word) {
     let data = ''
     try {
         data = await fetch({
-            url: 'http://dict.youdao.com/w/eng/' + Word + '/',
+            url: 'http://www.youdao.com/w/eng/' + Word + '/',
             encoding: ''
         })
     } catch (error) {
         console.log(error)
         Promise.reject(error)
     }
-    console.log(data)
+    // console.log(data)
     let $ = cheerio.load(data)
-    let spelling = {
-        '英': $('.baav .phonetic').eq(0).text(),
-        '美': $('.baav .phonetic').eq(1).text()
-    }
-    let explanation = $('.trans-container li').eq(0).text()
-    let sentences = $('#examplesToggle #bilingual>ul.ol li').map(function () {
-        let en = $(this).find('p').eq(0).text().replace(/\n|\t|(\s*$)/g, '')
-        let zh = $(this).find('p').eq(1).text().replace(/\n|\t|(\s*$)/g, '')
-        return {
-            en,
-            zh
-        }
+    // let spelling = {
+    //     '英': $('.baav .phonetic').eq(0).text(),
+    //     '美': $('.baav .phonetic').eq(1).text()
+    // }
+    let explanation = $('#phrsListTab .trans-container li').map(function () {
+        return $(this).text()
     }).get()
+    // let sentences = $('#examplesToggle #bilingual>ul.ol li').map(function () {
+    //     let en = $(this).find('p').eq(0).text().replace(/\n|\t|(\s*$)/g, '')
+    //     let zh = $(this).find('p').eq(1).text().replace(/\n|\t|(\s*$)/g, '')
+    //     return {
+    //         en,
+    //         zh
+    //     }
+    // }).get()
     let word = {
         word: Word,
-        spelling,
+        // spelling,
         explanation,
-        sentences
+        // sentences
     }
     console.log(word)
     return word
@@ -56,13 +58,13 @@ async function updateWord(Word) {
             },
             data: {
                 explanation: word.explanation,
-                spelling: word.spelling,
-                sentences: word.sentences
+                // spelling: word.spelling,
+                // sentences: word.sentences
             }
         })
-        let updatedWord = await mongodb.operate.queryWord({
-            word: word
-        })
+        // let updatedWord = await mongodb.operate.queryWord({
+        //     word: word
+        // })
 }
 (async function () {
     let client = null
@@ -72,18 +74,20 @@ async function updateWord(Word) {
         })
         client = mongodb.client
         let words = await mongodb.operate.getWords({
-            query: {sentences:[]},
+            query: {explanation: []},
             options: {
                 limit: null,
                 skip: null
             }
 
         })
+        console.log(words.length);
         // let promises = []
         for (let i = 0; i < words.length; i++) {
             let Word = words[i]
             await updateWord(Word)
             // promises.push(updateWord(Word));
+            console.log('total update: '+(i+1))
         }
         // await Promise.all(promises)
         client.close()

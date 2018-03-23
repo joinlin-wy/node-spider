@@ -7,9 +7,9 @@ function fetch(config) {
     config.encoding = null
     return new Promise((resolve, reject) => {
         request(config, function (error, res, body) {
-            console.log('fetched url:'+config.url + ' statusCode:'+res.statusCode)
+            console.log('fetched url:'+config.url + ' statusCode:'+ (res && res.statusCode))
             if (error) {
-                console.error(`${config.url} request error,statusCode:${res.statusCode},error massage:`)
+                console.error(`${config.url} request error,statusCode:${res && res.statusCode},error massage:`)
                 console.log(error)
                 console.log('end')
                 reject()

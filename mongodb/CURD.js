@@ -1,4 +1,4 @@
-/*  create, read, update, and delete  APIs:http://mongodb.github.io/node-mongodb-native/3.0/api/Collection.html*/
+/*  create, read, update, and delete  APIs: http://mongodb.github.io/node-mongodb-native/3.0/api/Collection.html */
 const assert = require('assert')
 const findDocument = function (config) {
     return new Promise(function (resolve, reject) {
