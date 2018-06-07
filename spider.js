@@ -1,41 +1,39 @@
-/**
- * joinlin 创建于 2017/9/29.
- */
-var request = require("request")
-var q = require("q")
-var fs = require("fs")
-var iconv = require('iconv-lite')
-var cheerio = require('cheerio')
+const fetch = require('./fetch');
+const fs = require('fs');
+const cheerio = require('cheerio');
 
-
-function req(url) {
-    var deferred = q.defer()
-    request({url: url, encoding: null}, function (error, res, body) {
-        if (error || res.statusCode != 200) {
-            deferred.reject(error)
-        } else {
-            deferred.resolve(body)
-        }
-    })
-    return deferred.promise
+function getContent(url) {
+    return fetch({
+        url,
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36'
+        },
+        method: 'get',
+        encoding: 'gb2312'
+    });
 }
-
-function operate(html) {
-    html = iconv.decode(html, 'utf-8')
-    // var $ = cheerio.load(html)
-    // var list = $('.recommend .directoryArea a').map(function() {
-    //    return {title:$(this).text(),href: $(this).attr('href')}
-    // }).get()
-    fs.writeFile('./response.txt', JSON.stringify(html))
-    console.log()
+async function getLink(url){
+    url = 'http://www.ygdy8.net/'+ url;
+    let data = await getContent(url);
+    let $ = cheerio.load(data);
+    
+    return $('#Zoom table a').eq(0).attr('href');
 }
-
-function runTask() {
-    req('http://123.56.220.103:9880/GwPortal/searchByKey?key=c&versionname=91_1101_20180123_001_gw&type=all')
-      .then(operate)
-      .fail(function (err) {
-          console.log(err)
-      })
-}
-
-runTask()
+getContent('http://www.ygdy8.net/html/gndy/dyzz/list_23_1.html').then(async function (data) {
+    let $ = cheerio.load(data);
+    let list = $('a.ulink');
+    let dataList = [];
+    for(let i = 0;i < list.length; i++){
+        let data = await getLink(list.attr('href'));
+        dataList.push({
+            name: list.eq(i).text(),
+            link: data
+        });
+    }
+    console.log(dataList);
+    fs.writeFile('./data/movie.json', JSON.stringify(dataList), (err) => {
+        console.log(err || '写入完成');
+    });
+}, (e) => {
+    console.error(e);
+});
